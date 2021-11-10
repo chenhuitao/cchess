@@ -1,0 +1,83 @@
+I like playing Chinese Chess (象棋).
+
+One day, I would play with my a remote friend. I use GNU/Linux with 
+GNOME desktop, search this game program on the internet, but could 
+not find it. I decided write one by myself, using GTK+.
+
+My English is very poor. :(  I readed the GTK+ API document, wrote this 
+program, so it may be very simple, weak. Would you like to help me?
+
+
+---------------------------------------------------------------------
+Chinese Chess Rules
+
+1.The Xiangqi board is made up of ten horizontal lines and nine vertical lines. 
+The verticals are interrupted by a central-horizontal void called a river. 
+Two palaces are positioned at opposite sides of the board. Each is distinguished 
+by a cross connecting its four corner points.Chinese Chess pieces are played on 
+line intersections which are called points.
+
+2.Each player has the following pieces:
+  2 Rooks		(R) 	(or chariots)
+  2 Knights 	(N) 	(or horses)
+  2 Elephants 	(M) 	(or bishops or ministers)
+  2 Mandarins 	(G) 	(or advisors or assistants or guards)
+  1 King 		(K) 	(or generals)
+  2 Cannons 	(C) 	
+  5 Pawns 		(P) 		(or soldiers) 
+and the pieces are shown below:  
+       R-N-M-G-K-G-M-N-R
+       +-+-+-+-+-+-+-+-+ 
+       +-C-+-+-+-+-+-C-+
+       P-+-P-+-P-+-P-+-P
+       +-+-+-+-+-+-+-+-+
+       |      river      |
+       +-+-+-+-+-+-+-+-+
+       P-+-P-+-P-+-P-+-P
+       +-C-+-+-+-+-+-C-+
+       +-+-+-+-+-+-+-+-+ 
+       R-N-M-G-K-G-M-N-R
+
+3.(R) Rooks can move horizontally or vertically for any empty spaces.
+  (N) Knights can only move one space horizontally or vertically and another 
+space diagonally to either forward direction. Knights can also be blocked. 
+If there is a piece (from either side) right next to the Knight, the Knight 
+CANNOT move toward that direction.
+  (C) Cannons can move horizontally or vertically for any empty spaces just 
+like Rooks. However, to take a piece, a cannon has to jump over another piece 
+(which is called a CANNON MOUNT) from either side. There is no limit on the 
+empty spaces between Cannon and the cannon mount or between cannon mount and 
+the piece being taken.
+  (M) Ministers' movements are confined to its own territory, which means a 
+Minister cannot move across the river. Ministers move diagonally and at two 
+spaces at a time, which means it always moves up or down for two spaces and 
+left or right for another two spaces. Therefore, a Minister can only be on 
+seven spots in the board. A Minister can be "blocked", that is if there is 
+a piece (from either side) in the next diagonal space of the Minister, the 
+Minister cannot move toward that direction.
+  (G) Guards are also confined to the palace. Guards move one diagonal space 
+at a time and cannot move horizontally or vertically.
+  (K) King's movements are limited to the palace (the center square marked 
+with an X). King moves one space (step) at a time and can only move vertically 
+or horizontally. King cannot move diagonally.
+  (P) Pawns move one space at a time. Before a Pawn moves across the river, 
+it moves forward only. Once a Pawn has moved across the river, it can move 
+forward or horizontally to either direction. A Pawn can NEVER move backward.
+
+4. Red moves first.
+  The game is won by checkmating or stalemating the opponent King.
+  Perpetual check is forbidden. You cannot check your opponent more than THREE 
+times in a row with the same piece and same board positions.
+  You cannot force an enemy piece to move to and from the same two points, 
+indefinitely, in order to avoid capture. The purpose of this rule (and the 
+above rule) is to avoid perpetual-check draws. Some of these situations are 
+complicated, but the person who is forcing the perpetual move must usually 
+break it off.
+  The game is a draw when neither side can force a checkmate or a stalemate.
+
+5. Kings are not allowed to face each other directly. This means there must 
+be at least a piece from either side in the vertical line between the two 
+kings. A King will be captured if it moves into the "line of sight" of the 
+other King.
+
+6. Other infomations and rules you can find it in the internet.

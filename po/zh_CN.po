@@ -1,0 +1,426 @@
+# Simplified Chinese translation of cchess.
+# Copyright (C) 2003 980501427
+# 980501427 <980501427@hotmail.com>, 2003.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cchess 0.01\n"
+"POT-Creation-Date: 2003-12-21 14:20+0800\n"
+"PO-Revision-Date: 2003-12-21 12:30+0800\n"
+"Last-Translator: 980501427 <h980501427@hotmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/createwindow.c:83 src/createwindow.c:339 src/createwindow.c:407
+msgid "Chinese Chess"
+msgstr "中国象棋"
+
+#: src/createwindow.c:93
+msgid "_Game"
+msgstr "游戏(_G)"
+
+#: src/createwindow.c:100
+msgid "_Quit"
+msgstr "退出(_Q)"
+
+#. GDK_Q Ctrl+Q
+#: src/createwindow.c:106
+msgid "_Preference"
+msgstr "首选项(_P)"
+
+#: src/createwindow.c:113
+msgid "_Setup"
+msgstr "设置(_S)"
+
+#. GDK_P Ctrl+P
+#: src/createwindow.c:119
+msgid "_Help"
+msgstr "帮助(_H)"
+
+#: src/createwindow.c:126
+msgid "_About"
+msgstr "关于(_A)"
+
+#: src/createwindow.c:137
+msgid "HostIP"
+msgstr "服务器IP"
+
+#: src/createwindow.c:149
+msgid "port"
+msgstr "端口"
+
+#: src/createwindow.c:161
+msgid "name"
+msgstr "昵称"
+
+#: src/createwindow.c:188
+msgid "H_ost"
+msgstr "建立主机(_O)"
+
+#: src/createwindow.c:194
+msgid "_Connect"
+msgstr "连接主机(_C)"
+
+#: src/createwindow.c:207
+msgid "_Start"
+msgstr "开始(_S)"
+
+#: src/createwindow.c:213
+msgid "_Exchange"
+msgstr "换先(_E)"
+
+#: src/createwindow.c:219
+msgid "_Draw"
+msgstr "和棋(_D)"
+
+#: src/createwindow.c:225
+msgid "_Resign"
+msgstr "认输(_R)"
+
+#: src/createwindow.c:341
+msgid "Version"
+msgstr "版本"
+
+#: src/createwindow.c:396
+msgid "About"
+msgstr "关于"
+
+#: src/createwindow.c:415
+msgid "Thank to RenHaibin, XuYonggang and Yangnengsheng"
+msgstr "感谢 任海滨, 徐永刚 和 杨能胜"
+
+#: src/createwindow.c:420
+msgid "Copyright (C) 2003 980501427"
+msgstr "版权所有 (C) 2003 980501427"
+
+#: src/createwindow.c:479
+msgid "Information"
+msgstr "信息"
+
+#: src/createwindow.c:512
+msgid "_Author"
+msgstr "作者(_A)"
+
+#: src/createwindow.c:537
+msgid "_Translator"
+msgstr "翻译(_T)"
+
+#: src/createwindow.c:553
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program; if not, write to the Free Software Foundation, Inc., 59 Temple "
+"Place, Suite 330, Boston, MA  02111-1307  USA\n"
+msgstr ""
+"这一程序是自由软件,你可以遵照自由软件基金会出版的GNU通用公共许可证条款来修改"
+"和重新发布这一程序.或者用许可证的第二版,或者(根据你的选择)用任何更新的版本.\n"
+"\n"
+"发布这一程序的目的是希望它有用,但没有任何担保.甚至没有适合特定目的的隐含的担"
+"保.更详细的情况请参阅GNU通用公共许可证(GPL).\n"
+"\n"
+"你应该已经和程序一起收到一份GNU通用公共许可证的副本.如果还没有,写信给:The "
+"Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  "
+"02111-1307, USA.\n"
+
+#: src/createwindow.c:564
+msgid "_License"
+msgstr "协议(_L)"
+
+#: src/createwindow.c:619
+msgid ""
+"Your opponent want to\n"
+"exchange the pieces.\n"
+"\n"
+"Do you accept ?"
+msgstr ""
+"对方请求换先,\n"
+"你同意吗?"
+
+#: src/createwindow.c:620 src/createwindow.c:691
+msgid "Exchange"
+msgstr "换先"
+
+#: src/createwindow.c:623
+msgid ""
+"Your opponent propose a draw.\n"
+"\n"
+"Do you accept ?"
+msgstr ""
+"对方请求和棋,\n"
+"你同意吗?"
+
+#: src/createwindow.c:624 src/createwindow.c:694
+msgid "Draw"
+msgstr "和棋"
+
+#: src/createwindow.c:627
+msgid "Recieve a unknow request."
+msgstr "收到无效请求."
+
+#: src/createwindow.c:628 src/createwindow.c:697
+msgid "Error"
+msgstr "错误"
+
+#: src/createwindow.c:701
+msgid "Wait for remote response ...\n"
+msgstr "等待对方回应 ... \n"
+
+#: src/callback.c:157
+msgid "Resign"
+msgstr "认输"
+
+#: src/callback.c:173
+msgid ""
+"Resign the game.\n"
+"\n"
+"Are you sure ?"
+msgstr "你真的认输吗?"
+
+#: src/cchess.c:41
+msgid "R"
+msgstr "车"
+
+#: src/cchess.c:41
+msgid "N"
+msgstr "马"
+
+#: src/cchess.c:41
+msgid "C"
+msgstr "炮"
+
+#: src/cchess.c:41
+msgid "M"
+msgstr "相"
+
+#: src/cchess.c:41
+msgid "G"
+msgstr "士"
+
+#: src/cchess.c:41
+msgid "K"
+msgstr "帅"
+
+#: src/cchess.c:41
+msgid "P"
+msgstr "兵"
+
+#: src/cchess.c:42
+msgid " R"
+msgstr "車"
+
+#: src/cchess.c:42
+msgid " N"
+msgstr "馬"
+
+#: src/cchess.c:42
+msgid " C"
+msgstr "炮"
+
+#: src/cchess.c:42
+msgid " M"
+msgstr "象"
+
+#: src/cchess.c:42
+msgid " G"
+msgstr "仕"
+
+#: src/cchess.c:42
+msgid " K"
+msgstr "将"
+
+#: src/cchess.c:42
+msgid " P"
+msgstr "兵"
+
+#: src/cchess.c:43
+msgid " +"
+msgstr "前"
+
+#: src/cchess.c:43
+msgid " -"
+msgstr "后"
+
+#: src/cchess.c:43
+msgid "+"
+msgstr "进"
+
+#: src/cchess.c:43
+msgid "-"
+msgstr "退"
+
+#: src/cchess.c:43
+msgid "="
+msgstr "平"
+
+#: src/cchess.c:44
+msgid "9"
+msgstr "九"
+
+#: src/cchess.c:44
+msgid "8"
+msgstr "八"
+
+#: src/cchess.c:44
+msgid "7"
+msgstr "七"
+
+#: src/cchess.c:44
+msgid "6"
+msgstr "六"
+
+#: src/cchess.c:44
+msgid "5"
+msgstr "五"
+
+#: src/cchess.c:44
+msgid "4"
+msgstr "四"
+
+#: src/cchess.c:44
+msgid "3"
+msgstr "三"
+
+#: src/cchess.c:44
+msgid "2"
+msgstr "二"
+
+#: src/cchess.c:44
+msgid "1"
+msgstr "一"
+
+#: src/cchess.c:632
+msgid "Can not convert !"
+msgstr "无法转换"
+
+#: src/cchess.c:688 src/cchess.c:692
+msgid "CHECKMATE !\n"
+msgstr "将军 !\n"
+
+#: src/cchess.c:729
+msgid "Game over"
+msgstr "游戏结束"
+
+#: src/cchess.c:747
+msgid "YOU WIN !\n"
+msgstr "你赢了 !\n"
+
+#: src/cchess.c:751
+msgid "YOU LOSE !\n"
+msgstr "你输了 !\n"
+
+#: src/cchess.c:755
+msgid "DRAW GAME !\n"
+msgstr "和棋 !\n"
+
+#: src/network.c:74
+msgid "Checking version ... "
+msgstr "检查版本 ... "
+
+#: src/network.c:79 src/network.c:102
+msgid ""
+"FAILURE!\n"
+"Disconnected !\n"
+msgstr ""
+"失败!\n"
+"断开连接\n"
+
+#: src/network.c:94
+msgid "Geting nickname ...\n"
+msgstr "获取对方昵称 ...\n"
+
+#: src/network.c:130
+msgid "Your opponent accept exchanging the pieces.\n"
+msgstr "对方接受换先.\n"
+
+#: src/network.c:136
+msgid "Your opponent refuse exchanging the pieces.\n"
+msgstr "对方拒绝换先.\n"
+
+#: src/network.c:155
+msgid "Your opponent accept the proposal.\n"
+msgstr "对方同意和棋.\n"
+
+#: src/network.c:161
+msgid "Your opponent refuse the proposal.\n"
+msgstr "对方拒绝和棋.\n"
+
+#: src/network.c:172
+msgid "Your opponent resign the game.\n"
+msgstr "对方认输了.\n"
+
+#: src/network.c:186
+msgid "Your opponent set his nickname : "
+msgstr "对方的昵称为 : "
+
+#: src/network.c:232
+msgid "server:server is running!\n"
+msgstr "server:主机正在运行!\n"
+
+#: src/network.c:238
+msgid "server:can't open stream socket!\n"
+msgstr "server:不能打开端口!\n"
+
+#: src/network.c:246
+msgid "server:can't bind local address!\n"
+msgstr "server:不能绑定本地址!\n"
+
+#: src/network.c:251
+msgid "server:listen socket error!\n"
+msgstr "server:监听端口失败!\n"
+
+#: src/network.c:256
+msgid "server:server created!\n"
+msgstr "server:服务建立!\n"
+
+#: src/network.c:271
+msgid "client:can't open stream socket!\n"
+msgstr "client:不能打开端口!\n"
+
+#: src/network.c:276
+msgid "client:can't connect to server!\n"
+msgstr "client:无法连接到主机!\n"
+
+#: src/network.c:281
+#, c-format
+msgid "server socket set %s has port %d\n"
+msgstr "主机的IP为 %s, 端口 %d\n"
+
+#: src/network.c:287
+msgid "client:client connected!\n"
+msgstr "client:客户端连接成功!\n"
+
+#: src/network.c:295
+msgid "server:accept error!\n"
+msgstr "server:接受客户失败!\n"
+
+#: src/network.c:299
+msgid "Too many connections or you connect yourself !\n"
+msgstr "太多的连接或者你连接到自己!\n"
+
+#: src/network.c:307
+#, c-format
+msgid "client socket from %s has port %d\n"
+msgstr "客户端的IP为 %s, 端口 %d\n"
+
+#: src/network.c:314
+msgid "Checking program ... "
+msgstr "检查程序 ... "
+
+#: src/network.c:346
+msgid "server:server shutdown!\n"
+msgstr "server:服务停止!\n"
+
+#: src/network.c:355
+msgid "client:disconnected!\n"
+msgstr "client:断开连接!\n"

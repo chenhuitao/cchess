@@ -1,0 +1,13 @@
+This is a list of some of the things I plan to work on for future releases
+of cchess. If there is something you feel should be included in a future
+version of cchess, please email me about it.
+
+1. Add time register.
+
+2. Add .rc file to save options.
+
+3. Save and load the game.
+
+4. When disconnected, reconnnect would continue the game.
+
+*5. Add a AI modules, so can play with computer. It's too hard, I am not sure.

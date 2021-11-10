@@ -1,0 +1,7 @@
+# List of source files containing translatable strings.
+
+src/main.c
+src/createwindow.c
+src/callback.c
+src/cchess.c
+src/network.c
