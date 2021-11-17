@@ -1,1 +1,11 @@
-wait for you ...
+2003-12-23  Huitao Chen
+
+        * v0.01 release
+
+2021-11-17 Huitao Chen
+
+        * Use modern GNU gettext and autotools.
+
+        * Use GTK+-3 or above.
+
+        * Change email address to <h980501427@163.com>.
