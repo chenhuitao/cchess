@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /*  network.h - network fuctions                                             */
-/*  Copyright (C) 2003 980501427 <h980501427@hotmail.com>                      */
+/*  Copyright (C) 2003 980501427 <h980501427@163.com>                      */
 /*                                                                           */
 /*  This program is free software; you can redistribute it and/or modify      */
 /*  it under the terms of the GNU General Public License as published by     */

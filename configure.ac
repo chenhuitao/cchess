@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([cchess], [0.02], [h980501427@hotmail.com])
+AC_INIT([cchess], [0.02], [h980501427@163.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([config.h])
 
