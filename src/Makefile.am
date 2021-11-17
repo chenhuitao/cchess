@@ -9,6 +9,10 @@ cchess_SOURCES = main.c \
                  network.h \
                  network.c
 cchess_LDADD = $(DEPS_LIBS)
-AM_CPPFLAGS = $(DEPS_CFLAGS) \
+AM_CFLAGS = $(DEPS_CFLAGS) \
               -DPIXMAPS_DIR=\""$(datadir)/pixmaps"\" \
-              -DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\"
+              -DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
+              -DGTK_DISABLE_SINGLE_INCLUDES \
+              -DGDK_DISABLE_DEPRECATED \
+              -DGTK_DISABLE_DEPRECATED \
+              -DGSEAL_ENABLE

@@ -32,11 +32,11 @@ gint create_server (GtkToggleButton *togglebutton, const gchar *port, const gcha
 
 gint do_connect (GtkToggleButton *togglebutton, const gchar *ip, const gchar *port, const gchar *name);
 
-void read_server_socket (gpointer data, gint source, GdkInputCondition condition);
-
 gint parse_message (gpointer data, const gchar *message);
 
-void read_socket (gpointer data, gint source, GdkInputCondition condition);
+gboolean read_server_socket (GIOChannel *source, GIOCondition condition, gpointer data);
+
+gboolean read_socket (GIOChannel *source, GIOCondition condition, gpointer data);
 
 void close_server_socket (gpointer data);
 

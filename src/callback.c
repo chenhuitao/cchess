@@ -18,11 +18,11 @@
 /*****************************************************************************/
 
 #include <config.h>
+#include <gtk/gtk.h>
 #include <createwindow.h>
 #include <callback.h>
 #include <cchess.h>
 #include <network.h>
-#include <gtk/gtk.h>
 
 void on_quit_activate (GtkMenuItem *menuitem, gpointer data) {
   GtkWidget *toggle_button_connect = get_widget (GTK_WIDGET (menuitem), "toggle_button_connect");
@@ -62,16 +62,17 @@ void on_toggle_button_host_toggled (GtkToggleButton *togglebutton, gpointer data
       server_sockfd_id = -2;
       gtk_toggle_button_set_active (togglebutton, FALSE);
     } else {
-      server_sockfd_id = gtk_input_add_full (server_sockfd,
-                                            GDK_INPUT_READ,
-                                            (GdkInputFunction) read_server_socket,
-                                            NULL,
+      GIOChannel *channel = g_io_channel_unix_new (server_sockfd);
+      server_sockfd_id = g_io_add_watch_full (channel,
+                                            G_PRIORITY_DEFAULT,
+                                            G_IO_IN,
+                                            (GIOFunc) read_server_socket,
                                             (gpointer) togglebutton,
                                             (GDestroyNotify) close_server_socket);
     }
   } else {
     if (server_sockfd_id > 0) {
-      gtk_input_remove (server_sockfd_id);
+      g_source_remove (server_sockfd_id);
     }
     server_sockfd_id = -1;
   }
@@ -91,18 +92,19 @@ void on_toggle_button_connect_toggled (GtkToggleButton *togglebutton, gpointer d
       sockfd_id = -2;
       gtk_toggle_button_set_active (togglebutton, FALSE);
     } else {
-      sockfd_id = gtk_input_add_full (sockfd,
-                                     GDK_INPUT_READ,
-                                     (GdkInputFunction) read_socket,
-                                     NULL,
-                                     (gpointer) togglebutton,
-                                     (GDestroyNotify) close_socket);
+      GIOChannel *channel = g_io_channel_unix_new (sockfd);
+      sockfd_id = g_io_add_watch_full (channel,
+                                    G_PRIORITY_DEFAULT,
+                                    G_IO_IN,
+                                    (GIOFunc) read_socket,
+                                    (gpointer) togglebutton,
+                                    (GDestroyNotify) close_socket);
     }
   } else {
     if (sockfd_id > 0) {
       change_chess_side (0);
       write_socket ("quit");
-      gtk_input_remove (sockfd_id);
+      g_source_remove (sockfd_id);
     }
     sockfd_id = -1;
   }
@@ -157,22 +159,24 @@ void on_button_resign_clicked (GtkButton *button, gpointer data) {
   GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Resign"),
                                                   GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                  GTK_STOCK_YES,
+                                                  _("_Yes"),
                                                   GTK_RESPONSE_YES,
-                                                  GTK_STOCK_NO,
+                                                  _("_No"),
                                                   GTK_RESPONSE_NO,
                                                   NULL);
-  GtkWidget *dialog_hbox = gtk_hbox_new (FALSE, 0);
-  gtk_widget_show (dialog_hbox);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), dialog_hbox, TRUE, TRUE, 8);
+  GtkWidget *content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-  GtkWidget *image_info = gtk_image_new_from_stock ("gtk-dialog-info", GTK_ICON_SIZE_DIALOG);
-  gtk_widget_show (image_info);
-  gtk_box_pack_start (GTK_BOX (dialog_hbox), image_info, TRUE, TRUE, 8);
+  GtkWidget *dialog_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_show (dialog_box);
+  gtk_box_pack_start (GTK_BOX (content_area), dialog_box, TRUE, TRUE, 8);
 
-  GtkWidget *label_info = gtk_label_new (_("Resign the game.\n\nAre you sure ?"));
-  gtk_widget_show (label_info);
-  gtk_box_pack_start (GTK_BOX (dialog_hbox), label_info, TRUE, TRUE, 8);
+  GtkWidget *image_question = gtk_image_new_from_icon_name ("dialog-question", GTK_ICON_SIZE_DIALOG);
+  gtk_widget_show (image_question);
+  gtk_box_pack_start (GTK_BOX (dialog_box), image_question, TRUE, TRUE, 8);
+
+  GtkWidget *label_question = gtk_label_new (_("Resign the game.\n\nAre you sure ?"));
+  gtk_widget_show (label_question);
+  gtk_box_pack_start (GTK_BOX (dialog_box), label_question, TRUE, TRUE, 8);
 
   j = gtk_dialog_run (GTK_DIALOG (dialog));
   switch (j) {
@@ -194,6 +198,7 @@ gboolean on_fixed_button_press_event (GtkWidget *widget, GdkEventButton  *event,
   gint x = -1;
   gint y = -1;
   convert_event_xy (event->x, event->y, &x, &y);
+
   i = get_chessman_by_xy (x, y);
   if (i == -1) {
     if (selected_chessman == -1) {

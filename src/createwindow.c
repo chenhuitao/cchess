@@ -18,10 +18,10 @@
 /*****************************************************************************/
 
 #include <config.h>
+#include <gtk/gtk.h>
 #include <createwindow.h>
 #include <callback.h>
 #include <cchess.h>
-#include <gtk/gtk.h>
 
 static GtkWidget *dialog_modal = NULL;
 
@@ -39,14 +39,13 @@ void create_window_main () {
   GtkWidget *menu_help;
   GtkWidget *menu_help_menu;
   GtkWidget *about;
-  GtkWidget *toolbar;
+  GtkWidget *box_tool;
   GtkWidget *label_ip;
   GtkWidget *entry_ip;
   GtkWidget *label_port;
   GtkWidget *entry_port;
   GtkWidget *label_name;
   GtkWidget *entry_name;
-  GtkWidget *handlebox;
   GtkWidget *hbox_handl;
   GtkWidget *hbuttonbox_toggle;
   GtkWidget *toggle_button_host;
@@ -58,7 +57,7 @@ void create_window_main () {
   GtkWidget *button_resign;
   GtkWidget *hpaned;
   GtkWidget *hbox_chess;
-  GtkWidget *vbox_cchess;
+  GtkWidget *event_box;
   GtkWidget *cchessboard;
   GtkWidget *fixed;
   GtkWidget *vpaned;
@@ -82,7 +81,7 @@ void create_window_main () {
   g_object_set_data (G_OBJECT (window_main), "window_main", window_main);
   gtk_window_set_title (GTK_WINDOW (window_main), _("Chinese Chess"));
 
-  vbox_main = gtk_vbox_new (FALSE, 2);
+  vbox_main = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (vbox_main);
   gtk_container_add (GTK_CONTAINER (window_main), vbox_main);
 
@@ -98,7 +97,7 @@ void create_window_main () {
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_game), menu_game_menu);
 
   quit = gtk_menu_item_new_with_mnemonic (_("_Quit"));
-  g_object_set_data_full (G_OBJECT (window_main), "quit", gtk_widget_ref (quit), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "quit", g_object_ref (quit), (GDestroyNotify) g_object_unref);
   gtk_widget_show (quit);
   gtk_container_add (GTK_CONTAINER (menu_game_menu), quit);
   gtk_widget_add_accelerator (quit, "activate", accel_group, 81, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); //GDK_Q Ctrl+Q
@@ -111,7 +110,7 @@ void create_window_main () {
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_preference), menu_preference_menu);
 
   setup = gtk_menu_item_new_with_mnemonic (_("_Setup"));
-  g_object_set_data_full (G_OBJECT (window_main), "setup", gtk_widget_ref (setup), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "setup", g_object_ref (setup), (GDestroyNotify) g_object_unref);
   gtk_widget_show (setup);
   gtk_container_add (GTK_CONTAINER (menu_preference_menu), setup);
   gtk_widget_add_accelerator (setup, "activate", accel_group, 80, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);//GDK_P Ctrl+P
@@ -124,61 +123,56 @@ void create_window_main () {
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_help), menu_help_menu);
 
   about = gtk_menu_item_new_with_mnemonic (_("_About"));
-  g_object_set_data_full (G_OBJECT (window_main), "about", gtk_widget_ref (about), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "about", g_object_ref (about), (GDestroyNotify) g_object_unref);
   gtk_widget_show (about);
   gtk_container_add (GTK_CONTAINER (menu_help_menu), about);
   gtk_widget_add_accelerator (about, "activate", accel_group, 65, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);//GDK_A Ctrl+A
 
-  toolbar = gtk_toolbar_new ();
-  gtk_widget_show (toolbar);
-  gtk_box_pack_start (GTK_BOX (vbox_main), toolbar, FALSE, FALSE, 0);
-  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH);
+  box_tool = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_show (box_tool);
+  gtk_box_pack_start (GTK_BOX (vbox_main), box_tool, FALSE, FALSE, 0);
 
   label_ip = gtk_label_new (_("HostIP"));
   gtk_widget_show (label_ip);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), label_ip, NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (box_tool), label_ip, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label_ip), GTK_JUSTIFY_LEFT);
 
   entry_ip = gtk_entry_new ();
-  g_object_set_data_full (G_OBJECT (window_main), "entry_ip", gtk_widget_ref (entry_ip), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "entry_ip", g_object_ref (entry_ip), (GDestroyNotify) g_object_unref);
   gtk_widget_show (entry_ip);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry_ip, NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (box_tool), entry_ip, FALSE, FALSE, 0);
   gtk_entry_set_max_length (GTK_ENTRY (entry_ip), 15);
   gtk_entry_set_text (GTK_ENTRY (entry_ip), "127.0.0.1");
 
   label_port = gtk_label_new (_("port"));
   gtk_widget_show (label_port);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), label_port, NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (box_tool), label_port, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label_port), GTK_JUSTIFY_LEFT);
 
   entry_port = gtk_entry_new ();
-  g_object_set_data_full (G_OBJECT (window_main), "entry_port", gtk_widget_ref (entry_port), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "entry_port", g_object_ref (entry_port), (GDestroyNotify) g_object_unref);
   gtk_widget_show (entry_port);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry_port, NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (box_tool), entry_port, FALSE, FALSE, 0);
   gtk_entry_set_max_length (GTK_ENTRY (entry_port), 5);
   gtk_entry_set_text (GTK_ENTRY (entry_port), "10000");
 
   label_name = gtk_label_new (_("name"));
   gtk_widget_show (label_name);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), label_name, NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (box_tool), label_name, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label_name), GTK_JUSTIFY_LEFT);
 
   entry_name = gtk_entry_new ();
-  g_object_set_data_full (G_OBJECT (window_main), "entry_name", gtk_widget_ref (entry_name), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "entry_name", g_object_ref (entry_name), (GDestroyNotify) g_object_unref);
   gtk_widget_show (entry_name);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry_name, NULL, NULL);
+  gtk_box_pack_start (GTK_BOX (box_tool), entry_name, FALSE, FALSE, 0);
   gtk_entry_set_max_length (GTK_ENTRY (entry_name), MAX_NAME_LEN - 2);
   gtk_entry_set_text (GTK_ENTRY (entry_name), g_get_user_name ());
 
-  handlebox = gtk_handle_box_new ();
-  gtk_widget_show (handlebox);
-  gtk_box_pack_start (GTK_BOX (vbox_main), handlebox, FALSE, FALSE, 0);
-
-  hbox_handl = gtk_hbox_new (FALSE, 16);
+  hbox_handl = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 16);
   gtk_widget_show (hbox_handl);
-  gtk_container_add (GTK_CONTAINER (handlebox), hbox_handl);
+  gtk_container_add (GTK_CONTAINER (vbox_main), hbox_handl);
 
-  hbuttonbox_toggle = gtk_hbutton_box_new ();
+  hbuttonbox_toggle = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_show (hbuttonbox_toggle);
   gtk_box_pack_start (GTK_BOX (hbox_handl), hbuttonbox_toggle, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hbuttonbox_toggle), 4);
@@ -186,18 +180,18 @@ void create_window_main () {
   gtk_box_set_spacing (GTK_BOX (hbuttonbox_toggle), 4);
 
   toggle_button_host = gtk_toggle_button_new_with_mnemonic (_("H_ost"));
-  g_object_set_data_full (G_OBJECT (window_main), "toggle_button_host", gtk_widget_ref (toggle_button_host), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "toggle_button_host", g_object_ref (toggle_button_host), (GDestroyNotify) g_object_unref);
   gtk_widget_show (toggle_button_host);
   gtk_container_add (GTK_CONTAINER (hbuttonbox_toggle), toggle_button_host);
-  GTK_WIDGET_SET_FLAGS (toggle_button_host, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_focus (toggle_button_host, TRUE);
 
   toggle_button_connect = gtk_toggle_button_new_with_mnemonic (_("_Connect"));
-  g_object_set_data_full (G_OBJECT (window_main), "toggle_button_connect", gtk_widget_ref (toggle_button_connect), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "toggle_button_connect", g_object_ref (toggle_button_connect), (GDestroyNotify) g_object_unref);
   gtk_widget_show (toggle_button_connect);
   gtk_container_add (GTK_CONTAINER (hbuttonbox_toggle), toggle_button_connect);
-  GTK_WIDGET_SET_FLAGS (toggle_button_connect, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_focus (toggle_button_connect, TRUE);
 
-  hbuttonbox_action = gtk_hbutton_box_new ();
+  hbuttonbox_action = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_show (hbuttonbox_action);
   gtk_box_pack_start (GTK_BOX (hbox_handl), hbuttonbox_action, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (hbuttonbox_action), 4);
@@ -205,51 +199,50 @@ void create_window_main () {
   gtk_box_set_spacing (GTK_BOX (hbuttonbox_action), 4);
 
   button_start = gtk_button_new_with_mnemonic (_("_Start"));
-  g_object_set_data_full (G_OBJECT (window_main), "button_start", gtk_widget_ref (button_start), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "button_start", g_object_ref (button_start), (GDestroyNotify) g_object_unref);
   gtk_widget_show (button_start);
   gtk_container_add (GTK_CONTAINER (hbuttonbox_action), button_start);
-  GTK_WIDGET_SET_FLAGS (button_start, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_focus (button_start, TRUE);
 
   button_exchange = gtk_button_new_with_mnemonic (_("_Exchange"));
-  g_object_set_data_full (G_OBJECT (window_main), "button_exchange", gtk_widget_ref (button_exchange), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "button_exchange", g_object_ref (button_exchange), (GDestroyNotify) g_object_unref);
   gtk_widget_show (button_exchange);
   gtk_container_add (GTK_CONTAINER (hbuttonbox_action), button_exchange);
-  GTK_WIDGET_SET_FLAGS (button_exchange, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_focus (button_exchange, TRUE);
 
   button_draw = gtk_button_new_with_mnemonic (_("_Draw"));
-  g_object_set_data_full (G_OBJECT (window_main), "button_draw", gtk_widget_ref (button_draw), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "button_draw", g_object_ref (button_draw), (GDestroyNotify) g_object_unref);
   gtk_widget_show (button_draw);
   gtk_container_add (GTK_CONTAINER (hbuttonbox_action), button_draw);
-  GTK_WIDGET_SET_FLAGS (button_draw, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_focus (button_draw, TRUE);
 
   button_resign = gtk_button_new_with_mnemonic (_("_Resign"));
-  g_object_set_data_full (G_OBJECT (window_main), "button_resign", gtk_widget_ref (button_resign), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "button_resign", g_object_ref (button_resign), (GDestroyNotify) g_object_unref);
   gtk_widget_show (button_resign);
   gtk_container_add (GTK_CONTAINER (hbuttonbox_action), button_resign);
-  GTK_WIDGET_SET_FLAGS (button_resign, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_focus (button_resign, TRUE);
 
-  hpaned = gtk_hpaned_new ();
+  hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_show (hpaned);
   gtk_box_pack_start (GTK_BOX (vbox_main), hpaned, TRUE, TRUE, 0);
 
-  hbox_chess = gtk_hbox_new (FALSE, 0);
+  hbox_chess = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (hbox_chess);
   gtk_paned_pack1 (GTK_PANED (hpaned), hbox_chess, TRUE, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (hbox_chess), 2);
 
-  vbox_cchess = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox_cchess);
-  gtk_box_pack_start (GTK_BOX (hbox_chess), vbox_cchess, TRUE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox_cchess), 2);
+  event_box = gtk_event_box_new ();
+  gtk_widget_show (event_box);
+  gtk_box_pack_start (GTK_BOX (hbox_chess), event_box, TRUE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (event_box), 2);
 
   fixed = gtk_fixed_new ();
-  g_object_set_data_full (G_OBJECT (window_main), "fixed", gtk_widget_ref (fixed), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "fixed", g_object_ref (fixed), (GDestroyNotify) g_object_unref);
   gtk_widget_show (fixed);
-  gtk_box_pack_start (GTK_BOX (vbox_cchess), fixed, TRUE, FALSE, 0);
-  gtk_fixed_set_has_window (GTK_FIXED (fixed), TRUE);
+  gtk_container_add (GTK_CONTAINER (event_box), fixed);
 
   cchessboard = gtk_image_new_from_file (PIXMAPS_DIR"/cchessboard.png");
-  g_object_set_data_full (G_OBJECT (window_main), "cchessboard", gtk_widget_ref (cchessboard), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "cchessboard", g_object_ref (cchessboard), (GDestroyNotify) g_object_unref);
   gtk_widget_show (cchessboard);
   gtk_fixed_put (GTK_FIXED (fixed), cchessboard, 0, 0);
 
@@ -293,7 +286,7 @@ void create_window_main () {
     gtk_fixed_put (GTK_FIXED (fixed), image[i], FIXEDOUT, FIXEDOUT);
   }
 
-  vpaned = gtk_vpaned_new ();
+  vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_widget_show (vpaned);
   gtk_paned_pack2 (GTK_PANED (hpaned), vpaned, TRUE, TRUE);
 
@@ -304,7 +297,7 @@ void create_window_main () {
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow_record), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   textview_record = gtk_text_view_new ();
-  g_object_set_data_full (G_OBJECT (window_main), "textview_record", gtk_widget_ref (textview_record), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "textview_record", g_object_ref (textview_record), (GDestroyNotify) g_object_unref);
   gtk_widget_show (textview_record);
   gtk_container_add (GTK_CONTAINER (scrolledwindow_record), textview_record);
   gtk_text_view_set_editable (GTK_TEXT_VIEW (textview_record), FALSE);
@@ -314,7 +307,7 @@ void create_window_main () {
   gtk_text_buffer_get_end_iter (buffer, &iter);
   mark = gtk_text_buffer_create_mark (buffer,"mark",&iter,TRUE);
 
-  vbox_talk = gtk_vbox_new (FALSE, 4);
+  vbox_talk = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (vbox_talk);
   gtk_paned_pack2 (GTK_PANED (vpaned), vbox_talk, TRUE, TRUE);
   gtk_container_set_border_width (GTK_CONTAINER (vbox_talk), 2);
@@ -325,7 +318,7 @@ void create_window_main () {
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow_talk), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   textview_talk = gtk_text_view_new ();
-  g_object_set_data_full (G_OBJECT (window_main), "textview_talk", gtk_widget_ref (textview_talk), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "textview_talk", g_object_ref (textview_talk), (GDestroyNotify) g_object_unref);
   gtk_widget_show (textview_talk);
   gtk_container_add (GTK_CONTAINER (scrolledwindow_talk), textview_talk);
   gtk_text_view_set_editable (GTK_TEXT_VIEW (textview_talk), FALSE);
@@ -343,7 +336,7 @@ void create_window_main () {
   mark = gtk_text_buffer_create_mark (buffer,"mark",&iter,TRUE);
 
   entry_talk = gtk_entry_new ();
-  g_object_set_data_full (G_OBJECT (window_main), "entry_talk", gtk_widget_ref (entry_talk), (GDestroyNotify) gtk_widget_unref);
+  g_object_set_data_full (G_OBJECT (window_main), "entry_talk", g_object_ref (entry_talk), (GDestroyNotify) g_object_unref);
   gtk_widget_show (entry_talk);
   gtk_box_pack_start (GTK_BOX (vbox_talk), entry_talk, FALSE, FALSE, 0);
   gtk_entry_set_max_length (GTK_ENTRY (entry_talk), 500);
@@ -365,7 +358,7 @@ void create_window_main () {
   g_signal_connect (G_OBJECT (button_exchange), "clicked", G_CALLBACK (on_button_exchange_clicked), NULL);
   g_signal_connect (G_OBJECT (button_draw), "clicked", G_CALLBACK (on_button_draw_clicked), NULL);
   g_signal_connect (G_OBJECT (button_resign), "clicked", G_CALLBACK (on_button_resign_clicked), NULL);
-  g_signal_connect (G_OBJECT (fixed), "button_press_event", G_CALLBACK (on_fixed_button_press_event), NULL);
+  g_signal_connect (G_OBJECT (event_box), "button_press_event", G_CALLBACK (on_fixed_button_press_event), NULL);
   g_signal_connect (G_OBJECT (entry_talk), "activate", G_CALLBACK (on_entry_talk_activate), NULL);
 
   gtk_window_set_icon (GTK_WINDOW (window_main), gdk_pixbuf_new_subpixbuf (pixbuf, 350, 50, 50, 50));
@@ -395,7 +388,7 @@ void create_window_about (GtkMenuItem *menuitem, gpointer data) {
     window_about = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window_about), _("About"));
 
-    vbox_about = gtk_vbox_new (FALSE, 8);
+    vbox_about = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
     gtk_widget_show (vbox_about);
     gtk_container_add (GTK_CONTAINER (window_about), vbox_about);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_about), 8);
@@ -422,21 +415,21 @@ void create_window_about (GtkMenuItem *menuitem, gpointer data) {
     gtk_box_pack_start (GTK_BOX (vbox_about), label_cr, FALSE, FALSE, 0);
     gtk_label_set_selectable (GTK_LABEL (label_cr), TRUE);
 
-    hbuttonbox = gtk_hbutton_box_new ();
+    hbuttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show (hbuttonbox);
     gtk_box_pack_start (GTK_BOX (vbox_about), hbuttonbox, TRUE, TRUE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (hbuttonbox), 4);
     gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox), GTK_BUTTONBOX_SPREAD);
 
-    button_info = gtk_button_new_from_stock ("gtk-dialog-info");
+    button_info = gtk_button_new_with_label (_("Info"));
     gtk_widget_show (button_info);
     gtk_container_add (GTK_CONTAINER (hbuttonbox), button_info);
-    GTK_WIDGET_SET_FLAGS (button_info, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (button_info, TRUE);
 
-    button_close = gtk_button_new_from_stock ("gtk-close");
+    button_close = gtk_button_new_with_label (_("Close"));
     gtk_widget_show (button_close);
     gtk_container_add (GTK_CONTAINER (hbuttonbox), button_close);
-    GTK_WIDGET_SET_FLAGS (button_close, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (button_close, TRUE);
 
     gtk_window_set_transient_for (GTK_WINDOW (window_about), GTK_WINDOW (data));
     gtk_window_set_position (GTK_WINDOW (window_about), GTK_WIN_POS_CENTER_ON_PARENT);
@@ -445,7 +438,7 @@ void create_window_about (GtkMenuItem *menuitem, gpointer data) {
 
     g_signal_connect (G_OBJECT (window_about), "destroy", G_CALLBACK (gtk_widget_destroyed), &window_about);
     g_signal_connect (G_OBJECT (button_info), "clicked", G_CALLBACK (create_window_info), (gpointer) window_about);
-    g_signal_connect_swapped (GTK_OBJECT (button_close), "clicked", G_CALLBACK (gtk_object_destroy), GTK_OBJECT (window_about));
+    g_signal_connect_swapped (G_OBJECT (button_close), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (window_about));
 
     gtk_widget_show (window_about);
   }
@@ -479,7 +472,7 @@ void create_window_info (GtkButton *button, gpointer data) {
     gtk_window_set_title (GTK_WINDOW (window_info), _("Information"));
     gtk_window_set_default_size (GTK_WINDOW (window_info), 300, 200);
 
-    vbox_info = gtk_vbox_new (FALSE, 8);
+    vbox_info = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
     gtk_widget_show (vbox_info);
     gtk_container_add (GTK_CONTAINER (window_info), vbox_info);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_info), 8);
@@ -498,7 +491,7 @@ void create_window_info (GtkButton *button, gpointer data) {
     gtk_container_add (GTK_CONTAINER (scrolledwindow_author), viewport_author);
     gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport_author), GTK_SHADOW_NONE);
 
-    vbox_author = gtk_vbox_new (FALSE, 0);
+    vbox_author = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_show (vbox_author);
     gtk_container_add (GTK_CONTAINER (viewport_author), vbox_author);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_author), 8);
@@ -507,7 +500,7 @@ void create_window_info (GtkButton *button, gpointer data) {
     gtk_widget_show (label_author_1);
     gtk_box_pack_start (GTK_BOX (vbox_author), label_author_1, FALSE, FALSE, 0);
     gtk_label_set_selectable (GTK_LABEL (label_author_1), TRUE);
-    gtk_misc_set_alignment (GTK_MISC (label_author_1), 0, 0.5);
+    gtk_widget_set_margin_top (label_author_1, 0.5);
 
     label_author = gtk_label_new_with_mnemonic (_("_Author"));
     gtk_widget_show (label_author);
@@ -523,7 +516,7 @@ void create_window_info (GtkButton *button, gpointer data) {
     gtk_container_add (GTK_CONTAINER (scrolledwindow_translator), viewport_translator);
     gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport_translator), GTK_SHADOW_NONE);
 
-    vbox_translator = gtk_vbox_new (FALSE, 0);
+    vbox_translator = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_show (vbox_translator);
     gtk_container_add (GTK_CONTAINER (viewport_translator), vbox_translator);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_translator), 8);
@@ -532,7 +525,7 @@ void create_window_info (GtkButton *button, gpointer data) {
     gtk_widget_show (label_translator_zh_CN);
     gtk_box_pack_start (GTK_BOX (vbox_translator), label_translator_zh_CN, FALSE, FALSE, 0);
     gtk_label_set_selectable (GTK_LABEL (label_translator_zh_CN), TRUE);
-    gtk_misc_set_alignment (GTK_MISC (label_translator_zh_CN), 0, 0.5);
+    gtk_widget_set_margin_top (label_translator_zh_CN, 0.5);
 
     label_translator = gtk_label_new_with_mnemonic (_("_Translator"));
     gtk_widget_show (label_translator);
@@ -565,15 +558,15 @@ void create_window_info (GtkButton *button, gpointer data) {
     gtk_widget_show (label_lisence);
     gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), 2), label_lisence);
 
-    hbuttonbox = gtk_hbutton_box_new ();
+    hbuttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show (hbuttonbox);
     gtk_box_pack_start (GTK_BOX (vbox_info), hbuttonbox, FALSE, FALSE, 0);
     gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox), GTK_BUTTONBOX_END);
 
-    button_close = gtk_button_new_from_stock ("gtk-close");
+    button_close = gtk_button_new_with_label (_("Close"));
     gtk_widget_show (button_close);
     gtk_container_add (GTK_CONTAINER (hbuttonbox), button_close);
-    GTK_WIDGET_SET_FLAGS (button_close, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (button_close, TRUE);
 
     gtk_window_set_transient_for (GTK_WINDOW (window_info), GTK_WINDOW (data));
     gtk_window_set_position (GTK_WINDOW (window_info), GTK_WIN_POS_CENTER_ON_PARENT);
@@ -581,7 +574,7 @@ void create_window_info (GtkButton *button, gpointer data) {
     gtk_window_set_icon (GTK_WINDOW (window_info), gtk_window_get_icon (gtk_window_get_transient_for (GTK_WINDOW (data))));
 
     g_signal_connect (G_OBJECT (window_info), "destroy", G_CALLBACK (gtk_widget_destroyed), &window_info);
-    g_signal_connect_swapped (GTK_OBJECT (button_close), "clicked", G_CALLBACK (gtk_widget_destroy), GTK_OBJECT (window_info));
+    g_signal_connect_swapped (G_OBJECT (button_close), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (window_info));
 
     gtk_widget_show (window_info);
   }
@@ -601,16 +594,16 @@ GtkWidget* create_dialog_question (gint question) {
     dialog_modal = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_container_set_border_width (GTK_CONTAINER (dialog_modal), 8);
 
-    vbox_dialog = gtk_vbox_new (FALSE, 0);
+    vbox_dialog = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_show (vbox_dialog);
     gtk_container_add (GTK_CONTAINER (dialog_modal), vbox_dialog);
 
-    hbox_dialog = gtk_hbox_new (FALSE, 4);
+    hbox_dialog = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
     gtk_widget_show (hbox_dialog);
     gtk_box_pack_start (GTK_BOX (vbox_dialog), hbox_dialog, FALSE, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (hbox_dialog), 8);
 
-    image_question = gtk_image_new_from_stock ("gtk-dialog-question", GTK_ICON_SIZE_DIALOG);
+    image_question = gtk_image_new_from_icon_name ("dialog-question", GTK_ICON_SIZE_DIALOG);
     gtk_widget_show (image_question);
     gtk_box_pack_start (GTK_BOX (hbox_dialog), image_question, FALSE, FALSE, 0);
 
@@ -631,24 +624,24 @@ GtkWidget* create_dialog_question (gint question) {
     gtk_widget_show (label_question);
     gtk_box_pack_start (GTK_BOX (hbox_dialog), label_question, FALSE, FALSE, 16);
 
-    hseparator = gtk_hseparator_new ();
+    hseparator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show (hseparator);
     gtk_box_pack_start (GTK_BOX (vbox_dialog), hseparator, FALSE, FALSE, 8);
 
-    hbuttonbox = gtk_hbutton_box_new ();
+    hbuttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show (hbuttonbox);
     gtk_box_pack_start (GTK_BOX (vbox_dialog), hbuttonbox, FALSE, FALSE, 0);
     gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox), GTK_BUTTONBOX_SPREAD);
 
-    button_yes = gtk_button_new_from_stock ("gtk-yes");
+    button_yes = gtk_button_new_with_label (_("Yes"));
     gtk_widget_show (button_yes);
     gtk_container_add (GTK_CONTAINER (hbuttonbox), button_yes);
-    GTK_WIDGET_SET_FLAGS (button_yes, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (button_yes, TRUE);
 
-    button_no = gtk_button_new_from_stock ("gtk-no");
+    button_no = gtk_button_new_with_label (_("No"));
     gtk_widget_show (button_no);
     gtk_container_add (GTK_CONTAINER (hbuttonbox), button_no);
-    GTK_WIDGET_SET_FLAGS (button_no, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (button_no, TRUE);
 
     gtk_window_set_resizable (GTK_WINDOW (dialog_modal), FALSE);
     gtk_window_set_modal (GTK_WINDOW (dialog_modal), TRUE);
@@ -673,16 +666,16 @@ GtkWidget* create_dialog_wait (gint request) {
     dialog_modal = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_container_set_border_width (GTK_CONTAINER (dialog_modal), 8);
 
-    vbox_dialog = gtk_vbox_new (FALSE, 0);
+    vbox_dialog = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_show (vbox_dialog);
     gtk_container_add (GTK_CONTAINER (dialog_modal), vbox_dialog);
 
-    hbox_dialog = gtk_hbox_new (FALSE, 4);
+    hbox_dialog = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
     gtk_widget_show (hbox_dialog);
     gtk_box_pack_start (GTK_BOX (vbox_dialog), hbox_dialog, FALSE, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (hbox_dialog), 8);
 
-    image_wait = gtk_image_new_from_stock ("gtk-dialog-info", GTK_ICON_SIZE_DIALOG);
+    image_wait = gtk_image_new_from_icon_name ("dialog-info", GTK_ICON_SIZE_DIALOG);
     gtk_widget_show (image_wait);
     gtk_box_pack_start (GTK_BOX (hbox_dialog), image_wait, FALSE, FALSE, 0);
 
@@ -702,19 +695,19 @@ GtkWidget* create_dialog_wait (gint request) {
     gtk_widget_show (label_wait);
     gtk_box_pack_start (GTK_BOX (hbox_dialog), label_wait, FALSE, FALSE, 16);
 
-    hseparator = gtk_hseparator_new ();
+    hseparator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show (hseparator);
     gtk_box_pack_start (GTK_BOX (vbox_dialog), hseparator, FALSE, FALSE, 8);
 
-    hbuttonbox = gtk_hbutton_box_new ();
+    hbuttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show (hbuttonbox);
     gtk_box_pack_start (GTK_BOX (vbox_dialog), hbuttonbox, FALSE, FALSE, 0);
     gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox), GTK_BUTTONBOX_END);
 
-    button_cancel = gtk_button_new_from_stock ("gtk-cancel");
+    button_cancel = gtk_button_new_with_label (_("Cancel"));
     gtk_widget_show (button_cancel);
     gtk_container_add (GTK_CONTAINER (hbuttonbox), button_cancel);
-    GTK_WIDGET_SET_FLAGS (button_cancel, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_focus (button_cancel, TRUE);
 
     gtk_window_set_resizable (GTK_WINDOW (dialog_modal), FALSE);
     gtk_window_set_modal (GTK_WINDOW (dialog_modal), TRUE);
@@ -731,4 +724,3 @@ void destroy_dialog_modal () {
     dialog_modal = NULL;
   }
 }
-

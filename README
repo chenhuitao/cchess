@@ -18,20 +18,20 @@ by a cross connecting its four corner points.Chinese Chess pieces are played on
 line intersections which are called points.
 
 2.Each player has the following pieces:
-  2 Rooks		(R) 	(or chariots)
-  2 Knights 	(N) 	(or horses)
-  2 Elephants 	(M) 	(or bishops or ministers)
-  2 Mandarins 	(G) 	(or advisors or assistants or guards)
-  1 King 		(K) 	(or generals)
-  2 Cannons 	(C) 	
-  5 Pawns 		(P) 		(or soldiers) 
+  2 Rooks       (R)     (or chariots)
+  2 Knights     (N)     (or horses)
+  2 Elephants   (M)     (or bishops or ministers)
+  2 Mandarins   (G)     (or advisors or assistants or guards)
+  1 King        (K)     (or generals)
+  2 Cannons     (C)
+  5 Pawns       (P)     (or soldiers) 
 and the pieces are shown below:  
        R-N-M-G-K-G-M-N-R
        +-+-+-+-+-+-+-+-+ 
        +-C-+-+-+-+-+-C-+
        P-+-P-+-P-+-P-+-P
        +-+-+-+-+-+-+-+-+
-       |      river      |
+       |     river     |
        +-+-+-+-+-+-+-+-+
        P-+-P-+-P-+-P-+-P
        +-C-+-+-+-+-+-C-+

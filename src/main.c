@@ -18,8 +18,8 @@
 /*****************************************************************************/
 
 #include <config.h>
-#include <createwindow.h>
 #include <gtk/gtk.h>
+#include <createwindow.h>
 
 /* Standard gettext macros. */
 #ifdef ENABLE_NLS
@@ -49,7 +49,6 @@ int main (int argc, char **argv)
   textdomain (PACKAGE);
 #endif
 
-  gtk_set_locale ();
   gtk_init (&argc, &argv);
 
   create_window_main ();

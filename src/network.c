@@ -18,10 +18,6 @@
 /*****************************************************************************/
 
 #include <config.h>
-#include <network.h>
-#include <cchess.h>
-#include <createwindow.h>
-#include <gtk/gtk.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +25,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
+#include <gtk/gtk.h>
+#include <network.h>
+#include <cchess.h>
+#include <createwindow.h>
 
 #define BUF_LEN 2048
 
@@ -288,20 +289,21 @@ gint do_connect (GtkToggleButton *togglebutton, const gchar *ip, const gchar *po
   return sockfd;
 }
 
-void read_server_socket (gpointer data, gint source, GdkInputCondition condition) {
+gboolean read_server_socket (GIOChannel *source, GIOCondition condition, gpointer data) {
   struct sockaddr_in client_addr;
   gint client_len = sizeof(client_addr);
+  gint len;
   if ((new_sockfd = accept(server_sockfd, (struct sockaddr *) &client_addr, &client_len)) < 0) {
     write_textview (_("server:accept error!\n"), 1);
-    return;
+    return FALSE;
   }
   if (sockfd > 0) {
     gchar *tmp = g_strdup_printf ("error %s",_("Too many connections or you connect yourself !\n"));
-    write (new_sockfd, tmp, strlen (tmp) + 1);
+    len = write (new_sockfd, tmp, strlen (tmp) + 1);
     close (new_sockfd);
     new_sockfd = -1;
     g_free ((gpointer) tmp);
-    return;
+    return TRUE;
   }
   if (getpeername (new_sockfd, (struct sockaddr *) &client_addr, &client_len) == 0 ) {
     gchar *tmp = g_strdup_printf (_("client socket from %s has port %d\n"),
@@ -310,13 +312,15 @@ void read_server_socket (gpointer data, gint source, GdkInputCondition condition
     g_free ((gpointer) tmp);
   }
   sockfd = new_sockfd;
-  write (sockfd, cmds[0], strlen (cmds[0]) + 1);
+  len = write (sockfd, cmds[0], strlen (cmds[0]) + 1);
   write_textview (_("Checking program ... "), 1);
   GtkWidget *toggle_button_connect = get_widget (GTK_WIDGET (data), "toggle_button_connect");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle_button_connect), TRUE);
+
+  return TRUE;
 }
 
-void read_socket (gpointer data, gint source, GdkInputCondition condition) {
+gboolean read_socket (GIOChannel *source, GIOCondition condition, gpointer data) {
   gchar* buf = g_strnfill (BUF_LEN, '\0');
   gint j;
   for (j = 0; j < BUF_LEN; j++) {
@@ -325,7 +329,7 @@ void read_socket (gpointer data, gint source, GdkInputCondition condition) {
   gint length = read (sockfd, buf, BUF_LEN - 2);
   if (length == 0) {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (data), FALSE);
-    return;
+    return FALSE;
   }
   j = strlen (buf);
   gint k = 0;
@@ -335,6 +339,8 @@ void read_socket (gpointer data, gint source, GdkInputCondition condition) {
     j = strlen (&buf[k]);
   }
   g_free ((gpointer) buf);
+
+  return TRUE;
 }
 
 void close_server_socket (gpointer data) {

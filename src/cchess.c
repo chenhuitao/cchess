@@ -50,11 +50,7 @@ GtkWidget* get_widget (GtkWidget *widget, const gchar *name) {
   GtkWidget *widget_temp;
 // get toplevel widget, data store there.
   while (1) {
-    if (GTK_IS_MENU (widget)) {
-      widget_parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
-    } else {
-      widget_parent = widget->parent;
-    }
+    widget_parent = gtk_widget_get_parent(widget);
     if (widget_parent == NULL) {
       break;
     }
@@ -617,7 +613,7 @@ void move_message (gint i, gint x, gint y) {
     case 29:
     case 30:
     case 31:
-      tmp = g_strdup_printf ("%s %s", _(black_pieces[((i - 16) / 2)]), number[HCCHESS - xy[i][0]]);
+      tmp = g_strdup_printf ("%s %s", _(black_pieces[6]), number[HCCHESS - xy[i][0]]);
       if (y == xy[i][1]) {
         message = g_strdup_printf ("%d: %s %s %s\n", chess_status, tmp, _(move_info[4]), number[HCCHESS - x]);
       }
@@ -722,24 +718,26 @@ void write_textview (const gchar *data, gint tag) {
 void game_over (gint status) {
   if (chess_status < 1) return;
   GtkWidget *dialog;
-  GtkWidget *dialog_hbox;
+  GtkWidget *content_area;
+  GtkWidget *dialog_box;
   GtkWidget *image_info;
   GtkWidget *label_info;
   gchar *tmp = NULL;
   dialog = gtk_dialog_new_with_buttons (_("Game over"),
                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (fixed))),
                                        GTK_DIALOG_MODAL |   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_STOCK_OK,
+                                       _("_OK"),
                                        GTK_RESPONSE_NONE,
                                        NULL);
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-  dialog_hbox = gtk_hbox_new (FALSE, 0);
-  gtk_widget_show (dialog_hbox);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), dialog_hbox, TRUE, TRUE, 8);
+  dialog_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_show (dialog_box);
+  gtk_box_pack_start (GTK_BOX (content_area), dialog_box, TRUE, TRUE, 8);
 
-  image_info = gtk_image_new_from_stock ("gtk-dialog-info", GTK_ICON_SIZE_DIALOG);
+  image_info = gtk_image_new_from_icon_name ("dialog-info", GTK_ICON_SIZE_DIALOG);
   gtk_widget_show (image_info);
-  gtk_box_pack_start (GTK_BOX (dialog_hbox), image_info, TRUE, TRUE, 8);
+  gtk_box_pack_start (GTK_BOX (dialog_box), image_info, TRUE, TRUE, 8);
 
   switch (status) {
     case 0:
@@ -761,7 +759,7 @@ void game_over (gint status) {
   label_info = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label_info), tmp);
   gtk_widget_show (label_info);
-  gtk_box_pack_start (GTK_BOX (dialog_hbox), label_info, TRUE, TRUE, 8);
+  gtk_box_pack_start (GTK_BOX (dialog_box), label_info, TRUE, TRUE, 8);
   g_free ((gpointer) tmp);
   
   g_signal_connect_swapped (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), (gpointer) dialog);
